@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://activiti.org/test">
+  <process id="process_365748" name="ltf员工离职流程" isExecutable="true">
+    <startEvent id="StartNoneEvent_1600234441212"></startEvent>
+    <exclusiveGateway id="ExclusiveGateway_1600234445140" default="SequenceFlow_1600234713673"></exclusiveGateway>
+    <userTask id="UserTask_1600234450308" name="发起离职" activiti:assignee="${creator}"></userTask>
+    <userTask id="UserTask_1600234470499" name="工作交接" activiti:assignee="${assignee}">
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${wfTaskConfigService.assignee(execution)}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="UserTask_1600234527556" name="上级领导审批" activiti:assignee="${wfTaskConfigService.assignee(execution)}"></userTask>
+    <sequenceFlow id="SequenceFlow_1600234713669" sourceRef="UserTask_1600234450308" targetRef="ExclusiveGateway_1600234445140"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1600234713673" sourceRef="ExclusiveGateway_1600234445140" targetRef="UserTask_1600234470499"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1600234718069" sourceRef="StartNoneEvent_1600234441212" targetRef="UserTask_1600234450308"></sequenceFlow>
+    <endEvent id="EndNoneEvent_1600234817188"></endEvent>
+    <serviceTask id="ServiceTask_1600234580548" name="抄送" activiti:delegateExpression="${workflowNotifyDelegate}">
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${wfTaskConfigService.assignee(execution)}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <sequenceFlow id="SequenceFlow_1600408054995" sourceRef="ExclusiveGateway_1600234445140" targetRef="UserTask_1600234527556">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${sahara_wf_gateways_map.get("ExclusiveGateway_1600234445140").contains("SequenceFlow_1600408054995")}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="UserTask_1600418598986" name="部门领导审批" activiti:assignee="${assignee}">
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${wfTaskConfigService.assignee(execution)}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+    </userTask>
+    <sequenceFlow id="SequenceFlow_1600418610204" sourceRef="UserTask_1600234527556" targetRef="UserTask_1600418598986"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1600418612580" sourceRef="ServiceTask_1600234580548" targetRef="EndNoneEvent_1600234817188"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1600418614258" sourceRef="UserTask_1600418598986" targetRef="ServiceTask_1600234580548"></sequenceFlow>
+    <sequenceFlow id="SequenceFlow_1600419617831" sourceRef="UserTask_1600234470499" targetRef="UserTask_1600234527556"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_process_365748">
+    <bpmndi:BPMNPlane bpmnElement="process_365748" id="BPMNPlane_process_365748">
+      <bpmndi:BPMNShape bpmnElement="StartNoneEvent_1600234441212" id="BPMNShape_StartNoneEvent_1600234441212">
+        <omgdc:Bounds height="32.0" width="32.0" x="99.0" y="110.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ExclusiveGateway_1600234445140" id="BPMNShape_ExclusiveGateway_1600234445140">
+        <omgdc:Bounds height="40.0" width="40.0" x="361.0" y="106.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask_1600234450308" id="BPMNShape_UserTask_1600234450308">
+        <omgdc:Bounds height="80.0" width="160.0" x="171.0" y="86.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask_1600234470499" id="BPMNShape_UserTask_1600234470499">
+        <omgdc:Bounds height="80.0" width="160.0" x="465.0" y="25.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask_1600234527556" id="BPMNShape_UserTask_1600234527556">
+        <omgdc:Bounds height="80.0" width="160.0" x="465.0" y="182.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="EndNoneEvent_1600234817188" id="BPMNShape_EndNoneEvent_1600234817188">
+        <omgdc:Bounds height="32.0" width="32.0" x="764.0" y="62.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ServiceTask_1600234580548" id="BPMNShape_ServiceTask_1600234580548">
+        <omgdc:Bounds height="80.0" width="160.0" x="885.0" y="182.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="UserTask_1600418598986" id="BPMNShape_UserTask_1600418598986">
+        <omgdc:Bounds height="80.0" width="160.0" x="677.0" y="182.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600408054995" id="BPMNEdge_SequenceFlow_1600408054995">
+        <omgdi:waypoint x="381.0" y="146.0"></omgdi:waypoint>
+        <omgdi:waypoint x="381.0" y="222.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="222.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600418610204" id="BPMNEdge_SequenceFlow_1600418610204">
+        <omgdi:waypoint x="625.0" y="222.0"></omgdi:waypoint>
+        <omgdi:waypoint x="677.0" y="222.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600418614258" id="BPMNEdge_SequenceFlow_1600418614258">
+        <omgdi:waypoint x="837.0" y="222.0"></omgdi:waypoint>
+        <omgdi:waypoint x="885.0" y="222.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600234713669" id="BPMNEdge_SequenceFlow_1600234713669">
+        <omgdi:waypoint x="331.0" y="126.0"></omgdi:waypoint>
+        <omgdi:waypoint x="361.0" y="126.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600234718069" id="BPMNEdge_SequenceFlow_1600234718069">
+        <omgdi:waypoint x="131.0" y="126.0"></omgdi:waypoint>
+        <omgdi:waypoint x="171.0" y="126.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600419617831" id="BPMNEdge_SequenceFlow_1600419617831">
+        <omgdi:waypoint x="545.0" y="105.0"></omgdi:waypoint>
+        <omgdi:waypoint x="545.0" y="182.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600234713673" id="BPMNEdge_SequenceFlow_1600234713673">
+        <omgdi:waypoint x="381.0" y="106.0"></omgdi:waypoint>
+        <omgdi:waypoint x="381.0" y="65.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="65.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="SequenceFlow_1600418612580" id="BPMNEdge_SequenceFlow_1600418612580">
+        <omgdi:waypoint x="965.0" y="182.0"></omgdi:waypoint>
+        <omgdi:waypoint x="965.0" y="78.0"></omgdi:waypoint>
+        <omgdi:waypoint x="796.0" y="78.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
