@@ -1,6 +1,10 @@
 package com.example.activitidemo.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.example.activitidemo.domain.entity.ActGeBytearray;
+import com.example.activitidemo.mapper.ActGeBytearrayMapper;
 import com.example.activitidemo.service.ActivityConsumerService;
+import com.example.activitidemo.utils.FileUtils;
 import com.example.activitidemo.utils.SpringContextHolder;
 import org.activiti.bpmn.model.*;
 import org.activiti.engine.HistoryService;
@@ -20,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -50,6 +55,8 @@ public class ActivityConsumerServiceImpl implements ActivityConsumerService {
 
     @Resource
     private RepositoryService repositoryService;
+    @Resource
+    ActGeBytearrayMapper actGeBytearrayMapper;
 
     @Override
     public boolean startActivityDemo(String processDefinitionId) {
@@ -203,6 +210,39 @@ public class ActivityConsumerServiceImpl implements ActivityConsumerService {
         //恢复原方向
         currFlow.setOutgoingFlows(oriSequenceFlows);
         return true;
+    }
+
+    @Override
+    public Object activiti(String id) throws IOException, ClassNotFoundException {
+
+//        //String str = new String(actGeBytearrayMapper.selectById(id).getBytes(),"UTF-8");
+//        File file=new File("D:\\MyData\\wuhx29\\Desktop\\b.txt");
+//        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+//        Object o = in.readObject();
+//        System.out.println(o.toString());
+        ActGeBytearray actGeBytearray = actGeBytearrayMapper.selectById(id);
+        byte[] bytes = actGeBytearray.getBytes();
+
+        //byte[] bytes = FileUtils.getContent("D:\\MyData\\wuhx29\\Desktop\\b.txt");
+        Object o = unserialize(bytes);
+        System.out.println(o.toString());
+        return o;
+    }
+
+    public Object unserialize(byte[] bytes)
+    {
+        ByteArrayInputStream bais = null;
+        if (bytes != null) {
+            try {
+                // 反序列化
+                bais = new ByteArrayInputStream(bytes);
+                ObjectInputStream ois = new ObjectInputStream(bais);
+                return ois.readObject();
+            } catch (Exception e) {
+                e.printStackTrace() ;
+            }
+        }
+        return null;
     }
 
 

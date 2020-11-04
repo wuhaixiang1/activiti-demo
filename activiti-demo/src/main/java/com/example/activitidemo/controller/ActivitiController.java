@@ -9,6 +9,8 @@ import org.activiti.engine.repository.Deployment;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <pre>
@@ -76,5 +78,20 @@ public class ActivitiController {
             e.printStackTrace();
         }
         return "执行成功";
+    }
+
+    @GetMapping("/activiti")
+    public Object activiti(String bytearrayId) throws IOException, ClassNotFoundException {
+//        Object string = null;
+//        try {
+//            string = consumerService.activiti(bytearrayId);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        return consumerService.activiti(bytearrayId);
     }
 }

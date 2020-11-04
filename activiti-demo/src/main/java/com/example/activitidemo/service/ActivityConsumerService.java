@@ -1,8 +1,13 @@
 package com.example.activitidemo.service;
 
+import com.example.activitidemo.mapper.ActGeBytearrayMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <pre>
@@ -32,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 //
 //}
 public interface ActivityConsumerService {
+
     /**
      * 流程demo
      * @return
@@ -47,6 +53,8 @@ public interface ActivityConsumerService {
     public String executeTask(String string);
 
     boolean rejected(String taskId, String targetID, String comment) throws Exception;
+
+    Object activiti(String id) throws IOException, ClassNotFoundException;
 
 
 }
