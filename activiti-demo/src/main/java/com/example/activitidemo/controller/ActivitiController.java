@@ -94,4 +94,19 @@ public class ActivitiController {
 //        }
         return consumerService.activiti(bytearrayId);
     }
+
+    @GetMapping("/bytearr")
+    public Object bytearr(String bytearrayId) {
+//        Object string = null;
+//        try {
+//            string = consumerService.activiti(bytearrayId);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        return consumerService.bytearr(bytearrayId);
+    }
 }

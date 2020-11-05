@@ -2,7 +2,9 @@ package com.example.activitidemo.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.example.activitidemo.domain.entity.ActGeBytearray;
+import com.example.activitidemo.domain.entity.Bytearr;
 import com.example.activitidemo.mapper.ActGeBytearrayMapper;
+import com.example.activitidemo.mapper.BytearrMapper;
 import com.example.activitidemo.service.ActivityConsumerService;
 import com.example.activitidemo.utils.FileUtils;
 import com.example.activitidemo.utils.SpringContextHolder;
@@ -57,6 +59,8 @@ public class ActivityConsumerServiceImpl implements ActivityConsumerService {
     private RepositoryService repositoryService;
     @Resource
     ActGeBytearrayMapper actGeBytearrayMapper;
+    @Resource
+    BytearrMapper bytearrMapper;
 
     @Override
     public boolean startActivityDemo(String processDefinitionId) {
@@ -224,6 +228,15 @@ public class ActivityConsumerServiceImpl implements ActivityConsumerService {
         byte[] bytes = actGeBytearray.getBytes();
 
         //byte[] bytes = FileUtils.getContent("D:\\MyData\\wuhx29\\Desktop\\b.txt");
+        Object o = unserialize(bytes);
+        System.out.println(o.toString());
+        return o;
+    }
+
+    @Override
+    public Object bytearr(String id) {
+        Bytearr actGeBytearray = bytearrMapper.selectById(id);
+        byte[] bytes = actGeBytearray.getC5();
         Object o = unserialize(bytes);
         System.out.println(o.toString());
         return o;

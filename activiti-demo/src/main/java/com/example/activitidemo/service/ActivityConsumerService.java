@@ -56,5 +56,7 @@ public interface ActivityConsumerService {
 
     Object activiti(String id) throws IOException, ClassNotFoundException;
 
+    Object bytearr(String id) ;
+
 
 }
